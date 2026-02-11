@@ -28,11 +28,6 @@
 
 Leader клавиша: `Space`
 
-### Переключение тем
-- `Space + td` - Rose Pine Dawn (светлая) ☀️
-- `Space + tm` - Rose Pine Main (темная) 🌙
-- `Space + tn` - Rose Pine Moon (темная) 🌚
-
 ### Файловый менеджер
 - `Space + e` - открыть/закрыть Neo-tree
 
