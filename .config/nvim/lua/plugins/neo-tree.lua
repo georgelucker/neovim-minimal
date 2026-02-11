@@ -32,6 +32,10 @@ return {
 				},
 				-- Использовать системные команды для операций с файлами
 				use_libuv_file_watcher = true,
+				filtered_items = {
+					hide_dotfiles = false,
+					hide_gitignored = false,
+				},
 			},
 		})
 
