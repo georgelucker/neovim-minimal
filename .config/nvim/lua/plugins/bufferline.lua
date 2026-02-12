@@ -10,6 +10,16 @@ return {
 				-- Режим отображения: "buffers" показывает буферы как вкладки
 				mode = "buffers",
 
+				-- для отображения вкладок не над neo-tree, а над полем ввода текста
+				offsets = { -- ← ДОБАВИТЬ ЭТУ СЕКЦИЮ
+					{
+						filetype = "neo-tree",
+						text = "File Explorer",
+						text_align = "center",
+						separator = true,
+					},
+				}, -- ← ДО СЮДА
+
 				-- Показывать номера вкладок
 				numbers = "none", -- Варианты: "none", "ordinal", "buffer_id", "both"
 
