@@ -25,4 +25,5 @@ require("lazy").setup({
 	{ import = "plugins.neo-tree" },
 	{ import = "plugins.theme" },
 	{ import = "plugins.bufferline" },
+	{ import = "plugins.cmp" },
 })
