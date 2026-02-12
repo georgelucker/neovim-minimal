@@ -24,8 +24,22 @@ return {
 				numbers = "none", -- Варианты: "none", "ordinal", "buffer_id", "both"
 
 				-- Кнопка закрытия вкладки
-				close_command = "bdelete! %d", -- Команда для закрытия буфера
-				right_mouse_command = "bdelete! %d", -- Закрытие правой кнопкой мыши
+				close_command = function(bufnum)
+					-- Если это последний буфер, создаём пустой перед закрытием
+					local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+					if #buffers <= 1 then
+						vim.cmd("enew") -- Создать новый пустой буфер
+					end
+					vim.cmd("bdelete! " .. bufnum)
+				end,
+				right_mouse_command = function(bufnum)
+					-- Если это последний буфер, создаём пустой перед закрытием
+					local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+					if #buffers <= 1 then
+						vim.cmd("enew") -- Создать новый пустой буфер
+					end
+					vim.cmd("bdelete! " .. bufnum)
+				end,
 
 				-- Индикатор для текущей вкладки
 				indicator = {
