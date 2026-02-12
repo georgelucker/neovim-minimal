@@ -53,8 +53,8 @@ return {
 				-- Разделитель между вкладками
 				separator_style = "thin", -- Варианты: "slant", "thick", "thin", "padded_slant"
 
-				-- Показывать вкладки только если их больше одной
-				always_show_bufferline = false,
+				-- Показывать вкладки только если их больше одной (true - видеть всегда)
+				always_show_bufferline = true,
 
 				-- Диагностика (ошибки, предупреждения)
 				diagnostics = false, -- Можно включить "nvim_lsp" если будет LSP
