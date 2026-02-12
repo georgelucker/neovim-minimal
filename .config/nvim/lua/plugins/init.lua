@@ -24,4 +24,5 @@ require("lazy").setup({
 	-- Импортируем конфигурации плагинов из папки plugins
 	{ import = "plugins.neo-tree" },
 	{ import = "plugins.theme" },
+	{ import = "plugins.bufferline" },
 })
