@@ -28,3 +28,7 @@ keymap("n", "<leader>X", ":BufferLineCloseOthers<CR>", {
 	desc = "Close other buffers",
 	silent = true,
 })
+
+-- Сохранять выделение после сдвига отступа (< и >)
+keymap("v", "<", "<gv", { desc = "Indent left and keep selection" })
+keymap("v", ">", ">gv", { desc = "Indent right and keep selection" })
