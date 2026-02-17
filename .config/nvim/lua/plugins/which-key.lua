@@ -14,6 +14,7 @@ return {
 		wk.add({
 			{ "<leader>t", group = "theme" }, -- Группа для переключения тем
 			{ "<leader>x", group = "buffer" }, -- Группа для управления буферами
+			{ "<leader>g", group = "git" },
 		})
 	end,
 }
