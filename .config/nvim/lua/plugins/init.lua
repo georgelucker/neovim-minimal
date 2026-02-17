@@ -26,4 +26,5 @@ require("lazy").setup({
 	{ import = "plugins.theme" },
 	{ import = "plugins.bufferline" },
 	{ import = "plugins.cmp" },
+	{ import = "plugins.which-key" },
 })
