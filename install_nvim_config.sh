@@ -11,4 +11,4 @@ rm -rf ~/.config/nvim
 
 echo "Шаг 2: Копирование новой конфигурации..."
 echo "Выполняется: cp -r ./.config/nvim ~/.config/"
-cp -r ./.config/nvim ~/.config/
+cp -r ./.config/nvim ~/.config/nvim
