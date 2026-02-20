@@ -1,11 +1,14 @@
 #!/bin/bash
+echo "Получение актуального состояния репозитория"
+git pull
+
 echo "Шаг 1: Удаление старой конфигурации Neovim..."
 echo "Выполняется: rm -rf ~/.config/nvim"
 read -p "Продолжить? (y/N): " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Операция отменена пользователем"
-    exit 1
+  echo "❌ Операция отменена пользователем"
+  exit 1
 fi
 rm -rf ~/.config/nvim
 
