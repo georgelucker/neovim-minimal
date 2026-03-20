@@ -10,6 +10,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   echo "❌ Операция отменена пользователем"
   exit 1
 fi
+mkdir -p ~/.config
 rm -rf ~/.config/nvim
 
 echo "Шаг 2: Копирование новой конфигурации..."
