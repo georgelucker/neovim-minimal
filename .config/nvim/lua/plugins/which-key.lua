@@ -15,6 +15,8 @@ return {
 			{ "<leader>t", group = "theme" }, -- Группа для переключения тем
 			{ "<leader>x", group = "buffer" }, -- Группа для управления буферами
 			{ "<leader>g", group = "git" },
+			{ "<leader>e", group = "encrypt/edit" }, -- sops
+			{ "<leader>d", group = "decrypt" }, -- sops
 		})
 	end,
 }
