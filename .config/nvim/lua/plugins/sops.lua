@@ -8,19 +8,14 @@ return {
 		{ "<leader>ef", vim.cmd.SopsEncrypt, desc = "Encrypt File" },
 		{ "<leader>df", vim.cmd.SopsDecrypt, desc = "Decrypt File" },
 	},
-	opts = {
-		-- Включить плагин
-		enabled = true,
+	config = function()
+		-- Устанавливаем переменную окружения перед запуском плагина
+		vim.env.SOPS_AGE_KEY_FILE = vim.fn.expand("~/.config/sops/age/keys.txt")
 
-		-- Отладка (показывать больше информации)
-		debug = false,
-
-		-- Путь к sops (по умолчанию ищет в $PATH)
-		binPath = "sops",
-
-		-- Переменные окружения (если нужно переопределить)
-		defaults = {
-			ageKeyFile = "SOPS_AGE_KEY_FILE", -- ~/.config/sops/age/keys.txt
-		},
-	},
+		require("nvim_sops").setup({
+			enabled = true,
+			debug = true, -- Включаем отладку
+			binPath = "sops",
+		})
+	end,
 }
