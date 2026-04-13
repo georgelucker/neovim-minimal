@@ -28,4 +28,5 @@ require("lazy").setup({
 	{ import = "plugins.cmp" },
 	{ import = "plugins.which-key" },
 	{ import = "plugins.toggleterm" },
+	{ import = "plugins.sops" },
 })
