@@ -27,8 +27,8 @@ return {
 			end,
 		})
 
-		-- Полная замена команды сохранения для SOPS файлов
-		vim.api.nvim_create_autocmd("BufWriteCmd", {
+		-- Зашифровка при сохранении
+		vim.api.nvim_create_autocmd("BufWritePre", {
 			group = sops_au,
 			pattern = "*.sops.*",
 			callback = function()
@@ -36,32 +36,20 @@ return {
 					local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 					local file = vim.fn.expand("%:p")
 					local tmp = vim.fn.tempname()
-
-					-- Записываем расшифрованное содержимое во временный файл
 					vim.fn.writefile(lines, tmp)
-
-					-- Зашифровываем и сохраняем
-					local result =
-						vim.fn.system("sops -e " .. vim.fn.shellescape(tmp) .. " > " .. vim.fn.shellescape(file))
+					vim.fn.system("sops -e " .. vim.fn.shellescape(tmp) .. " > " .. vim.fn.shellescape(file))
 					os.remove(tmp)
+				end
+			end,
+		})
 
-					if vim.v.shell_error == 0 then
-						-- Отмечаем буфер как сохранённый
-						vim.bo.modified = false
-						print("🔒 SOPS file encrypted and saved")
-
-						-- Перечитываем файл (расшифрованный в буфер)
-						local dec = vim.fn.system("sops -d " .. vim.fn.shellescape(file))
-						if vim.v.shell_error == 0 then
-							vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(dec, "\n"))
-							vim.bo.modified = false
-						end
-					else
-						print("❌ Failed to encrypt SOPS file")
-					end
-				else
-					-- Обычное сохранение для не-SOPS файлов
-					vim.cmd("write!")
+		-- После сохранения - перечитать расшифрованное
+		vim.api.nvim_create_autocmd("BufWritePost", {
+			group = sops_au,
+			pattern = "*.sops.*",
+			callback = function()
+				if vim.b.sops_enc then
+					vim.cmd("edit!")
 				end
 			end,
 		})
