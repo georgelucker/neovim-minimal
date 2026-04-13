@@ -9,19 +9,6 @@ return {
 
 		local sops_au = vim.api.nvim_create_augroup("SopsBuffer", { clear = true })
 
-		-- Функция для поиска .sops.yaml в родительских директориях
-		local function find_sops_config(start_path)
-			local current = start_path
-			while current ~= "/" do
-				local sops_file = current .. "/.sops.yaml"
-				if vim.fn.filereadable(sops_file) == 1 then
-					return current
-				end
-				current = vim.fn.fnamemodify(current, ":h")
-			end
-			return nil
-		end
-
 		-- Расшифровка при открытии - только в буфер, не на диск
 		vim.api.nvim_create_autocmd("BufReadPost", {
 			group = sops_au,
@@ -35,6 +22,7 @@ return {
 						vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(dec, "\n"))
 						vim.bo.modified = false
 						vim.b.sops_enc = true
+						vim.b.sops_file = file -- Сохраняем путь к оригинальному файлу
 					end
 				end
 			end,
@@ -47,47 +35,36 @@ return {
 			callback = function()
 				if vim.b.sops_enc then
 					local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-					local file = vim.fn.expand("%:p")
-					local file_dir = vim.fn.fnamemodify(file, ":h")
+					local file = vim.b.sops_file or vim.fn.expand("%:p")
 					local tmp = vim.fn.tempname()
-
-					-- Ищем .sops.yaml в родительских директориях
-					local sops_root = find_sops_config(file_dir)
-
-					if not sops_root then
-						print("❌ .sops.yaml not found in parent directories")
-						return
-					end
 
 					-- Записываем расшифрованное содержимое во временный файл
 					vim.fn.writefile(lines, tmp)
 
-					-- Зашифровываем ИЗ КОРНЯ РЕПОЗИТОРИЯ (где есть .sops.yaml)
-					local cmd = string.format(
-						"cd %s && sops -e %s > %s",
-						vim.fn.shellescape(sops_root),
-						vim.fn.shellescape(tmp),
-						vim.fn.shellescape(file)
-					)
-					local result = vim.fn.system(cmd)
-					os.remove(tmp)
+					-- Зашифровываем используя оригинальный файл как шаблон
+					-- sops updatekeys берёт ключи из оригинального файла
+					local cmd =
+						string.format("sops -e --input-type yaml --output-type yaml %s", vim.fn.shellescape(tmp))
+					local enc_content = vim.fn.system(cmd)
 
 					if vim.v.shell_error == 0 then
-						-- Отмечаем буфер как сохранённый
+						-- Записываем зашифрованное содержимое в файл
+						vim.fn.writefile(vim.split(enc_content, "\n"), file)
 						vim.bo.modified = false
-						print("🔒 SOPS file encrypted and saved")
+						print("🔒 Encrypted and saved")
 
-						-- Перечитываем файл (расшифрованный в буфер)
+						-- Перечитываем расшифрованное в буфер
 						local dec = vim.fn.system("sops -d " .. vim.fn.shellescape(file))
 						if vim.v.shell_error == 0 then
 							vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(dec, "\n"))
 							vim.bo.modified = false
 						end
 					else
-						print("❌ Failed to encrypt SOPS file: " .. result)
+						print("❌ Failed to encrypt: " .. enc_content)
 					end
+
+					os.remove(tmp)
 				else
-					-- Обычное сохранение для не-SOPS файлов
 					vim.cmd("write!")
 				end
 			end,
