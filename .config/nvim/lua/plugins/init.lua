@@ -29,5 +29,5 @@ require("lazy").setup({
 	{ import = "plugins.which-key" },
 	{ import = "plugins.toggleterm" },
 	{ import = "plugins.sops" },
-    { import = "plugins.treesitter" },
+    -- { import = "plugins.treesitter" },
 })
